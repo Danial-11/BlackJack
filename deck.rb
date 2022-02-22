@@ -1,5 +1,4 @@
 class Deck
-  attr_reader :cards
   attr_accessor :totalCards
 
   def initialize
