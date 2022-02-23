@@ -1,5 +1,5 @@
 class Deck
-  attr_accessor :totalCards
+  attr_accessor :totalCards, :cards
 
   def initialize
     @cards = deckCards
@@ -11,11 +11,11 @@ class Deck
     @value = ["A", 2, 3, 4, 5, 6, 7, 8, 9, "J", "Q", "K"]
     @suit = ['♠', '♣', '♥', '♦']
     @suit.each do |suit|
-      @value.each do |value|
-        cards << Card.new(value, suit)
+        @value.each do |value|
+          cards << Card.new(value, suit)
+        end
       end
-    end
-    cards
+      cards
   end
 
   def give_Cards
