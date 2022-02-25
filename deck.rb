@@ -1,26 +1,34 @@
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift File.dirname(__FILE__)
+require_relative 'card'
+
+# new class deck
 class Deck
-  attr_accessor :totalCards, :cards
+  attr_accessor :card
 
   def initialize
-    @cards = deckCards
-  end
-
-  def deck_Cards
-    totalCards = 52
-    cards = []
-    @value = ["A", 2, 3, 4, 5, 6, 7, 8, 9, "J", "Q", "K"]
-    @suit = ['♠', '♣', '♥', '♦']
-    @suit.each do |suit|
-        @value.each do |value|
-          cards << Card.new(value, suit)
-        end
+    @card = []
+    rank = [2, 3, 4, 5, 6, 7, 8, 9]
+    suit = %i[Diamonds Hearts Spades Clubs]
+    suit.each do |suit|
+      rank.each do |rank|
+        @card << Card.new(rank, suit)
       end
-      cards
+      @card << Card.new('J', suit)
+      @card << Card.new('Q', suit)
+      @card << Card.new('K', suit)
+      @card << Card.new('A', suit)
+    end
   end
 
-  def give_Cards
-    @chosen_card = cards.sample
-    cards.delete(@chosen_card)
-    @chosen_card
+  def shuffle
+    @card.shuffle!
+  end
+
+  def take
+    @selected_card = @card.sample
+    @card.delete(@selected_card)
+    @selected_card
   end
 end
