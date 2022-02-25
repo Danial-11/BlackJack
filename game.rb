@@ -94,7 +94,7 @@ elsif dealer_total > player_total
   if dealer_total <= 21
     puts 'Dealer won!'
   else
-    puts 'Dealer busted!'
+    puts
     exit
   end
 else
