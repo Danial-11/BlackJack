@@ -11,14 +11,14 @@ class Deck
     @card = []
     rank = [2, 3, 4, 5, 6, 7, 8, 9]
     suit = %i[Diamonds Hearts Spades Clubs]
-    suit.each do |suit|
-      rank.each do |rank|
-        @card << Card.new(rank, suit)
+    suit.each do |suits|
+      rank.each do |ranks|
+        @card << Card.new(ranks, suits)
       end
-      @card << Card.new('J', suit)
-      @card << Card.new('Q', suit)
-      @card << Card.new('K', suit)
-      @card << Card.new('A', suit)
+      @card << Card.new('J', suits)
+      @card << Card.new('Q', suits)
+      @card << Card.new('K', suits)
+      @card << Card.new('A', suits)
     end
   end
 

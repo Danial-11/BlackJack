@@ -3,105 +3,128 @@
 $LOAD_PATH.unshift File.dirname(__FILE__)
 require_relative 'deck'
 
-deck = Deck.new
-deck.shuffle
+module Hello
+  def player_total(player_hand)
+    player_hand.inject(0) { |sum, rank| sum + rank.value }
+  end
 
-player_hand = []
-dealer_hand = []
-
-puts 'Welcome to BLACK JACK GAME'
-2.times do
-  player_hand << deck.take
-  dealer_hand << deck.take
+  def dealer_total(dealer_hand)
+    dealer_hand.inject(0) { |sum, rank| sum + rank.value }
+  end
 end
-player_total = player_hand.inject(0) { |sum, rank| sum + rank.value }
-dealer_total = dealer_hand.inject(0) { |sum, rank| sum + rank.value }
+# class game
 
-if player_total == 21
-  puts player_hand, dealer_hand
-  puts 'You win!'
-  exit
-elsif dealer_total == 21
-  puts 'you lost and dealer won!'
-  exit
-else
-  puts "Dealer's one card is facedown. other card is #{dealer_hand[0]}"
-  puts 'your cards are: '
-  puts player_hand
-  puts "You total score is #{player_total}"
-  puts 'you want to hit or pass?'
-  hit_pass = gets.chomp
+class Game
+  include Hello
+  deck = Deck.new
+  deck.shuffle
 
-  if hit_pass.upcase == 'H'
+  player_hand = []
+  dealer_hand = []
+
+  puts 'Welcome to BLACK JACK GAME'
+  2.times do
     player_hand << deck.take
+    dealer_hand << deck.take
+  end
+
+  if Game.new.player_total(player_hand) == 21
+    puts 'Player cards:'
     puts player_hand
-    player_total = player_hand.inject(0) { |sum, rank| sum + rank.value }
-    puts player_total
-    if player_total > 21
-      puts 'player busted'
-      exit
-    elsif player_total == 21
-      puts 'you win'
-      exit
-    else
-      puts 'you want to hit or pass?'
-      hit_pass = gets.chomp
-      if hit_pass.upcase == 'H'
-        player_hand << deck.take
-        puts player_hand
-        player_total = player_hand.inject(0) { |sum, rank| sum + rank.value }
-        puts "Player's total score: #{player_total}"
-        if player_total > 21
-          puts 'you busted so lost'
-          exit
-        end
-      elsif hit_pass.upcase != 'H'
-        puts
-      end
-    end
-  elsif hit_pass.upcase != 'H'
-    puts
-  end
-end
-
-while dealer_total < 17 do
-  dealer_hand << deck.take
-  dealer_total = dealer_hand.inject(0) { |sum, rank| sum + rank.value }
-  if dealer_total > 21
-    puts 'dealer cards:'
+    puts 'Dealer cards:'
     puts dealer_hand
-    puts 'Dealer busted, You won!'
+    puts 'You win!'
+    exit
+  elsif Game.new.player_total(player_hand) > 21
+    puts 'Player Total'
+    puts player_hand, Game.new.player_total(player_hand)
+    puts 'Player Busted!'
+    exit
+  elsif Game.new.dealer_total(dealer_hand) == 21
+    puts 'Player cards:'
+    puts player_hand
+    puts 'Dealer cards:'
+    puts dealer_hand
+    puts 'you lost and dealer won!'
+    exit
   else
-    puts
+    puts "Dealer's one card is facedown. other card is #{dealer_hand[0]}"
+    puts 'your cards are: '
+    puts player_hand
+    puts "You total score is #{Game.new.player_total(player_hand)}"
+    puts 'you want to hit or pass?'
+    hit_pass = gets.chomp
+    if hit_pass.casecmp('H').zero?
+      player_hand << deck.take
+      puts player_hand
+      Game.new.player_total(player_hand)
+      puts Game.new.player_total(player_hand)
+      if Game.new.player_total(player_hand) > 21
+        puts 'player busted'
+        exit
+      elsif Game.new.player_total(player_hand) == 21
+        puts 'you win'
+        exit
+      else
+        puts 'you want to hit or pass?'
+        hit_pass = gets.chomp
+        if hit_pass.casecmp('H').zero?
+          player_hand << deck.take
+          puts player_hand
+          Game.new.player_total(player_hand)
+          puts "Player's total score: #{Game.new.player_total(player_hand)}"
+          if Game.new.player_total(player_hand) > 21
+            puts 'you busted so lost'
+            exit
+          end
+        else
+          puts
+        end
+      end
+    else
+      puts
+    end
   end
-end
 
-if player_total > dealer_total
-  puts 'Player cards:'
-  puts player_hand
-  puts 'Dealer cards:'
-  puts dealer_hand
-  if player_total <= 21
-    puts 'Player won'
-  else
-    puts 'Player busted'
+  while Game.new.dealer_total(dealer_hand) < 17
+    dealer_hand << deck.take
+    Game.new.dealer_total(dealer_hand)
+    if Game.new.dealer_total(dealer_hand) > 21
+      puts 'dealer cards:'
+      puts dealer_hand
+      puts 'Dealer busted, You won!'
+    else
+      puts
+    end
   end
-elsif dealer_total > player_total
-  puts 'Player cards: '
-  puts player_hand
-  puts 'Dealer cards:'
-  puts dealer_hand
-  if dealer_total <= 21
-    puts 'Dealer won!'
+
+  if Game.new.player_total(player_hand) > Game.new.dealer_total(dealer_hand)
+    puts 'Player cards:'
+    puts player_hand
+    puts 'Dealer cards:'
+    puts dealer_hand
+    if Game.new.player_total(player_hand) <= 21
+      puts 'Player won'
+    else
+      puts 'Player busted'
+    end
+  elsif Game.new.dealer_total(dealer_hand) > Game.new.player_total(player_hand)
+    puts 'Player cards: '
+    puts player_hand
+    puts 'Dealer cards:'
+    puts dealer_hand
+    if Game.new.dealer_total(dealer_hand) <= 21
+      puts 'Dealer won!'
+    else
+      puts
+      exit
+    end
   else
-    puts
+    puts 'Player cards: '
+    puts player_hand
+    puts 'Dealer cards:'
+    puts dealer_hand
+    puts 'Its Tie'
     exit
   end
-else
-  puts 'Player cards: '
-  puts player_hand
-  puts 'Dealer cards:'
-  puts dealer_hand
-  puts 'Its Tie'
-  exit
 end
