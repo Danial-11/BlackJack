@@ -27,7 +27,7 @@ class Game
 
   def check_scores(deck)
     if @player_score == 21
-      puts "Player cards:\n #{@player_hand.join("\n")}\nPlayer Score: #{@player_score}\nPlayer Wins!"
+      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nPlayer Wins!"
       exit
     elsif @player_score > 21
       puts "Player cards:\n #{@player_hand.join("\n")}\nPlayer Score: #{@player_score}\nPlayer Busted!"
@@ -56,8 +56,8 @@ class Game
       else
         d_conditions(deck)
       end
-      check_player_score
     end
+    check_player_score
   end
 
   def d_conditions(deck)
@@ -72,23 +72,25 @@ class Game
 
   def check_player_score
     if @player_score > 21
-      puts "Player cards:\n#{@player_hand.join("\n")}\nPlayer Busted!"
+      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nPlayer Busted!"
       exit
     elsif @player_score == 21
-      puts "Player cards:\n#{@player_hand.join("\n")}\nPlayer Wins!"
+      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nPlayer Wins!"
       exit
     elsif @dealer_score > 21
-      puts "Dealer cards:\n#{@dealer_hand.join("\n")}\nDealer Busted!"
+      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nDealer Busted!"
       exit
     elsif @dealer_score == 21
-      puts "Dealer cards:\n#{@dealer_hand.join("\n")}\nDealer Wins!"
-      exit
-    elsif @dealer_score > @player_score
-      puts "Dealer cards:\n#{@dealer_hand.join("\n")}\nPlayer cards:\n#{@player_hand.join("\n")}\nDealer Wins!"
+      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nDealer Wins!"
       exit
     elsif @dealer_score == @player_score
-      puts "Dealer cards:\n#{@dealer_hand.join("\n")}\nPlayer cards:\n#{@player_hand.join("\n")}\nIt's a Tie!"
+      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nIt is a Tie!"
       exit
+    elsif @dealer_score > @player_score
+      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nDealer Wins!"
+      exit
+    else
+      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nPlayer Wins!"
     end
   end
 end
