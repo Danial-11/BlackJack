@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.dirname(__FILE__)
 require_relative 'card'
 
 # new class deck

@@ -1,103 +1,94 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.dirname(__FILE__)
 require_relative 'deck'
 require_relative 'module'
-
-# class game
-
+# game class
 class Game
-  game = Game.new
   include Meths
-  deck = Deck.new
-  deck.shuffle
-
-  player_hand = []
-  dealer_hand = []
-
-  puts 'Welcome to BLACK JACK GAME'
-  2.times do
-    player_hand << deck.take
-    dealer_hand << deck.take
+  @player_score = 0
+  @dealer_score = 0
+  def initialize
+    @dealer_hand = []
+    @player_hand = []
+    deck = Deck.new
+    deck.shuffle
+    2.times do
+      @player_hand << deck.take
+      @dealer_hand << deck.take
+    end
+    @player_score = score(@player_hand)
+    @dealer_score = score(@dealer_hand)
+    puts 'Welcome to BlackJack Game'
+    puts "Dealer one card is facedown, other card is #{@dealer_hand[1]}"
+    puts "Player cards:\n#{@player_hand.join("\n")}"
+    puts "Player score: #{@player_score}"
+    check_scores(deck)
   end
 
-  if game.player_total(player_hand) == 21
-    puts "Player cards:\n#{player_hand.join("\n")}\nDealer cards: \n#{dealer_hand.join("\n")} \n You win "
-    exit
-  elsif game.player_total(player_hand) > 21
-    puts "Player cards:\n#{player_hand.join("\n")}\nPlayer Score: \n#{game.player_total(player_hand)} \nPlayer busted!"
-    exit
-  elsif game.dealer_total(dealer_hand) == 21
-    puts "Player cards:\n#{player_hand.join("\n")}\nDealer cards:\n#{dealer_hand.join("\n")}\nDealer wins!"
-    exit
-  else
-    puts "Dealer's one card is facedown. other card is #{dealer_hand[0]}"
-    puts "Player cards:\n#{player_hand.join("\n")}\nPlayer score: #{game.player_total(player_hand)}"
-    puts "press 'h' for hit or any key for pass!"
-    hit_pass = gets.chomp
+  def check_scores(deck)
+    if @player_score == 21
+      puts "Player cards:\n #{@player_hand.join("\n")}\nPlayer Score: #{@player_score}\nPlayer Wins!"
+      exit
+    elsif @player_score > 21
+      puts "Player cards:\n #{@player_hand.join("\n")}\nPlayer Score: #{@player_score}\nPlayer Busted!"
+      exit
+    elsif @dealer_score == 21
+      puts "Dealer cards:\n#{@dealer_hand.join("\n")}\nDealer Score: #{@dealer_score}\nDealer Wins!"
+      exit
+    else
+      p_conditions(deck)
+    end
+  end
 
-    if hit_pass.casecmp('H').zero?
-      player_hand << deck.take
-      puts player_hand
-      game.player_total(player_hand)
-      puts game.player_total(player_hand)
-      if game.player_total(player_hand) > 21
-        puts 'player busted'
-        exit
-      elsif game.player_total(player_hand) == 21
-        puts 'you win'
-        exit
+  def start_game
+    initialize
+  end
+
+  def p_conditions(deck)
+    while @player_score < 21
+      puts "Press 'h' for hit or any other key to pass!"
+      hit_pass = gets.chomp
+      if hit_pass.casecmp('H').zero?
+        @player_hand << deck.take
+        puts "Player gets #{@player_hand[-1]}"
+        @player_score = score(@player_hand)
+        puts "Player new score: #{@player_score}"
       else
-        puts "press 'h' for hit or any key for pass!"
-        hit_pass = gets.chomp
-        if hit_pass.casecmp('H').zero?
-          player_hand << deck.take
-          puts player_hand
-          game.player_total(player_hand)
-          puts "Player's total score: #{game.player_total(player_hand)}"
-          if game.player_total(player_hand) > 21
-            puts 'you busted so lost'
-            exit
-          end
-        else
-          puts
-        end
+        d_conditions(deck)
       end
-    else
-      puts
-    end
-  end
-  while game.dealer_total(dealer_hand) < 17
-    dealer_hand << deck.take
-    game.dealer_total(dealer_hand)
-    if game.dealer_total(dealer_hand) > 21
-      puts "Dealer cards:\n#{dealer_hand.join("\n")}\nDealer Busted!\n"
-    else
-      puts
+      check_player_score
     end
   end
 
-  if game.player_total(player_hand) > game.dealer_total(dealer_hand)
-    puts "Player cards:\n#{player_hand.join("\n")}\nDealer cards:\n#{dealer_hand.join("\n")}"
-    if game.player_total(player_hand) <= 21
-      puts 'Player won'
-    else
-      puts 'Player busted'
+  def d_conditions(deck)
+    while @dealer_score < 17
+      @dealer_hand << deck.take
+      puts "Dealer gets #{@dealer_hand[-1]}"
+      @dealer_score = score(@dealer_hand)
+      puts "Dealer new score: #{@dealer_score}"
     end
-  elsif game.dealer_total(dealer_hand) > game.player_total(player_hand)
-    puts "Player cards:\n#{player_hand.join("\n")} \nDealer cards:\n#{dealer_hand.join("\n")}"
-    if game.dealer_total(dealer_hand) <= 21
-      puts 'Dealer won!'
-    else
-      puts
+    check_player_score
+  end
+
+  def check_player_score
+    if @player_score > 21
+      puts "Player cards:\n#{@player_hand.join("\n")}\nPlayer Busted!"
+      exit
+    elsif @player_score == 21
+      puts "Player cards:\n#{@player_hand.join("\n")}\nPlayer Wins!"
+      exit
+    elsif @dealer_score > 21
+      puts "Dealer cards:\n#{@dealer_hand.join("\n")}\nDealer Busted!"
+      exit
+    elsif @dealer_score == 21
+      puts "Dealer cards:\n#{@dealer_hand.join("\n")}\nDealer Wins!"
+      exit
+    elsif @dealer_score > @player_score
+      puts "Dealer cards:\n#{@dealer_hand.join("\n")}\nPlayer cards:\n#{@player_hand.join("\n")}\nDealer Wins!"
+      exit
+    elsif @dealer_score == @player_score
+      puts "Dealer cards:\n#{@dealer_hand.join("\n")}\nPlayer cards:\n#{@player_hand.join("\n")}\nIt's a Tie!"
       exit
     end
-  else
-    puts 'Player cards: '
-    puts player_hand
-    puts 'Dealer cards:'
-    puts dealer_hand
-    puts 'Its Tie'
-    exit
   end
 end
