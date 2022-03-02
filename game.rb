@@ -2,9 +2,11 @@
 
 require_relative 'deck'
 require_relative 'module'
+require_relative 'checks'
 # game class
 class Game
   include Meths
+  include Checks
   @player_score = 0
   @dealer_score = 0
   def initialize
@@ -71,26 +73,12 @@ class Game
   end
 
   def check_player_score
-    if @player_score > 21
-      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nPlayer Busted!"
-      exit
-    elsif @player_score == 21
-      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nPlayer Wins!"
-      exit
-    elsif @dealer_score > 21
-      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nDealer Busted!"
-      exit
-    elsif @dealer_score == 21
-      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nDealer Wins!"
-      exit
-    elsif @dealer_score == @player_score
-      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nIt is a Tie!"
-      exit
-    elsif @dealer_score > @player_score
-      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nDealer Wins!"
-      exit
-    else
-      puts "Player cards:\n#{@player_hand.join("\n")}\nDealer cards:\n#{@dealer_hand.join("\n")}\nPlayer Wins!"
-    end
+    cond1
+    cond2
+    cond3
+    cond4
+    cond5
+    cond6
+    cond7
   end
 end
